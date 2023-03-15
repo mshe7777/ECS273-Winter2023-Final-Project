@@ -14,13 +14,19 @@ MONTH_LIST = None
 
 
 def get_month_list():
+    global MONTH_LIST
     return MONTH_LIST.copy()
 
 
+def get_basic_dataframe():
+    global df_basic_immutable
+    return df_basic_immutable.copy()
+
+
 # define the function loading data from target file
-def init():
+def init(filepath):
     columns = ['source', 'target', 'rating', 'datetime']
-    df = pd.read_csv(file_name, names=columns, header=None,
+    df = pd.read_csv(filepath, names=columns, header=None,
                      dtype={"source": str, "target": str, "rating": int}, )
     # to convert the given seconds of epoch with decimal value to a datetime
     df['datetime'] = df['datetime'].astype(int)
@@ -35,7 +41,6 @@ def init():
     # step 2: further filter by month list
     __get_month_list()
     df = df[df.datetime_typed.dt.to_period('M').isin(MONTH_LIST)]
-
 
 
 # inner method,shouldn't be invoked from any outer code
@@ -57,7 +62,7 @@ def __get_user_list():
     mergedDF = mergedDF.query("rating_out+rating_in >= 40")
     mergedDF = mergedDF.sample(n=300)
 
-    # sort the sampled dataframe according to sum(rating_out+rating_int) descendingly.
+    # sort the sampled dataframe according to sum(rating_out+rating_int) in reverse order.
     # sorted_indices2 = (mergedDF["rating_out"] + mergedDF["rating_in"]).sort_values(ascending=False).index
     # mergedDF = mergedDF.loc[sorted_indices2, :]
 
