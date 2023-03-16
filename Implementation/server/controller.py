@@ -57,7 +57,42 @@ def monthly_degree_distribution(month_parameter):
     return monthGroupedDf.to_dict('records')
 
 
+def rating_score_distribution(month_parameter):
+    df_basic_immutable = get_basic_dataframe()
+    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_parameter]
+    # group data according to rating scores
+    ratingGroupedDf = monthFilteredDf.groupby('rating').agg({'source': 'size'}).reset_index()
+
+    last_rating = -11
+    supplement_list = []
+    max_rating = -11
+    for index, row in ratingGroupedDf.iterrows():
+        current_rating = row['rating']
+        max_rating = current_rating
+
+        while current_rating - last_rating > 1:
+            last_rating = last_rating + 1
+            supplement_list.append(last_rating)
+        last_rating = last_rating + 1
+
+    # supplement_list
+
+    for missing_month in supplement_list:
+        if missing_month == 0:
+            continue
+        ratingGroupedDf.loc[len(ratingGroupedDf.index)] = [missing_month, 0]
+
+    while max_rating < 10:
+        max_rating = max_rating + 1
+        ratingGroupedDf.loc[len(ratingGroupedDf.index)] = [max_rating, 0]
+
+    ratingGroupedDf = ratingGroupedDf.sort_values(by=['rating'])
+    ratingGroupedDf = ratingGroupedDf.reset_index(drop=True)
+    ratingGroupedDf = ratingGroupedDf.rename(columns={'rating': 'edgeRating', 'source': 'frequency'})
+    return ratingGroupedDf.to_dict('records')
+
+
 if __name__ == "__main__":
     init("./data/soc-sign-bitcoinotc.csv")
-    dictList = monthly_degree_distribution(Period('2011-03'))
+    dictList = rating_score_distribution(Period('2012-03'))
     print(dictList)
