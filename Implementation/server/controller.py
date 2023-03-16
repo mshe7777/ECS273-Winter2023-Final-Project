@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 from pandas._libs.tslibs.period import Period
 
-from data_process.load_data import init,get_month_list, get_basic_dataframe
+from data_process.load_data import init, get_month_list, get_basic_dataframe
 import json
+
 
 def get_months():
     return get_month_list()
@@ -44,23 +45,19 @@ def query_rating_records(parameter_month):
     return filtered3[['source', 'target', 'rating', 'time']].to_dict('records')
 
 
-def test(month):
-    # step 0. request parameter correction
-    month_period = None
-    if month == '0':
-        month_period = get_months()[0]
-    else:
-        month_period = Period(month)
-
-    # step 1. get user temporally statistic data
-    user_statistic_list = get_temporal_user_statistics(month_period)
-    # step 2. rating records
-    record_list = query_rating_records(month_period)
-    # step 3. merge and generate result string
-    return json.dumps({'nodes': user_statistic_list, 'links': record_list})
+def monthly_degree_distribution(month_parameter):
+    df_basic_immutable = get_basic_dataframe()
+    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_parameter]
+    monthFilteredDf['datetime_typed'] = monthFilteredDf.datetime_typed.dt.to_period('M')
+    monthFilteredDf.reset_index()
+    monthFilteredDf
+    # group by month
+    monthGroupedDf = monthFilteredDf.groupby('datetime_typed').agg({'rating': 'size'}).reset_index()
+    monthGroupedDf = monthGroupedDf.rename(columns={'datetime_typed': 'time', 'rating': 'edgeNumber'})
+    return monthGroupedDf.to_dict('records')
 
 
 if __name__ == "__main__":
     init("./data/soc-sign-bitcoinotc.csv")
-    strResult = test('0')
-    print(strResult)
+    dictList = monthly_degree_distribution(Period('2011-03'))
+    print(dictList)

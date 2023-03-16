@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from pandas._libs.tslibs.period import Period
 from data_process.load_data import init
-from controller import get_months, get_temporal_user_statistics, query_rating_records
+from controller import get_months, get_temporal_user_statistics, query_rating_records, monthly_degree_distribution
 import numpy as np
 import json
 
@@ -28,18 +28,28 @@ def fetch_month_list():
 @cross_origin()
 def temporal_user_rating_statistics(month):
     # step 0. request parameter correction
-    month_period = None
-    if month == '0':
-        month_period = get_months()[0]
-    else:
-        month_period = Period(month)
-
+    month_period = get_month_period(month)
     # step 1. get user temporally statistic data
     user_statistic_list = get_temporal_user_statistics(month_period)
     # step 2. rating records
     record_list = query_rating_records(month_period)
     # step 3. merge and generate result string
     return json.dumps({'nodes': user_statistic_list, 'links': record_list})
+
+
+@app.route("/temporal/degreeDistribution/<month>")
+@cross_origin()
+def temporal_user_rating_statistics(month):
+    month_period = get_month_period(month)
+    dictList = monthly_degree_distribution(month_period)
+    return json.dumps({'data': dictList})
+
+
+def get_month_period(month):
+    if month == '0':
+        return get_months()[0]
+    else:
+        return Period(month)
 
 
 if __name__ == "__main__":
