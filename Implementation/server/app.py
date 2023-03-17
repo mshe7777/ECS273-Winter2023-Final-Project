@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from pandas._libs.tslibs.period import Period
 from data_process.load_data import init
 from controller import get_months, get_temporal_user_statistics, query_rating_records, monthly_degree_distribution, \
-    rating_score_distribution, user_monthly_degree
+    rating_score_distribution, user_monthly_degree,save_raw_data_to_file
 import numpy as np
 import json
 
@@ -65,6 +65,14 @@ def monthly_degree(user_id, month):
 
     dictList = user_monthly_degree(user_id, month_period)
     return json.dumps({'data': dictList})
+
+
+@app.route("/file/generate")
+@cross_origin()
+def generate_file():
+    save_raw_data_to_file()
+    return json.dumps({'result':'done'})
+
 
 
 def get_month_period(month):

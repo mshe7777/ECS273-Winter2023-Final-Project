@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from pandas._libs.tslibs.period import Period
-
+import os
 from data_process.load_data import init, get_month_list, get_basic_dataframe
 import json
 
@@ -118,7 +118,15 @@ def user_monthly_degree(user_id, month_period):
     return mergedUserDf.to_dict('records')
 
 
+def save_raw_data_to_file():
+    basic_dataframe = get_basic_dataframe()
+    if os.path.exists("./export_dataframe.json"):
+        os.remove("./export_dataframe.json")
+
+    basic_dataframe.to_json(r'./export_dataframe.json', orient='records')
+
+
 if __name__ == "__main__":
     init("./data/soc-sign-bitcoinotc.csv")
-    dictList = user_monthly_degree('2', Period('2012-03'))
-    print(dictList)
+    save_raw_data_to_file()
+    print('done')
