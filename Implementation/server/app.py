@@ -40,7 +40,7 @@ def temporal_user_rating_statistics(month):
 
 @app.route("/temporal/degreeDistribution/<month>")
 @cross_origin()
-def temporal_user_rating_statistics(month):
+def temporal_degree_distribution(month):
     month_period = get_month_period(month)
     dictList = monthly_degree_distribution(month_period)
     return json.dumps({'data': dictList})
@@ -56,9 +56,9 @@ def rating_distribution(month):
 
 @app.route("/temporal/user/monthlyDegree/<user_id>/<month>")
 @cross_origin()
-def rating_distribution(user_id, month):
+def monthly_degree(user_id, month):
     month_period = None
-    if month == '0':
+    if month == '-1':
         month_period = get_months()[-1]
     else:
         month_period = Period(month)

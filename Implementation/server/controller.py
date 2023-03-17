@@ -50,10 +50,11 @@ def monthly_degree_distribution(month_parameter):
     monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_parameter]
     monthFilteredDf['datetime_typed'] = monthFilteredDf.datetime_typed.dt.to_period('M')
     monthFilteredDf.reset_index()
-    monthFilteredDf
+
     # group by month
     monthGroupedDf = monthFilteredDf.groupby('datetime_typed').agg({'rating': 'size'}).reset_index()
     monthGroupedDf = monthGroupedDf.rename(columns={'datetime_typed': 'time', 'rating': 'edgeNumber'})
+    monthGroupedDf['time'] = monthGroupedDf.time.astype(str)
     return monthGroupedDf.to_dict('records')
 
 
@@ -113,6 +114,7 @@ def user_monthly_degree(user_id, month_period):
     mergedUserDf = pd.merge(outgoingFilteredDf, incomingFilteredDf, how='outer', on='month', )
     mergedUserDf = mergedUserDf.replace(np.nan, 0)
     mergedUserDf[['outgoing', 'incoming']] = mergedUserDf[['outgoing', 'incoming']].astype(int)
+    mergedUserDf['month'] = mergedUserDf.month.astype(str)
     return mergedUserDf.to_dict('records')
 
 
