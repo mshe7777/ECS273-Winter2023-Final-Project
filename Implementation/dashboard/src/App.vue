@@ -1,15 +1,13 @@
 <script lang="ts">
-import Notes from './components/Notes.vue'
-import Example from './components/Example.vue'
-import ExampleWithLegend from './components/ExampleWithLegend.vue';
-import ExampleWithInteractions from './components/ExampleWithInteractions.vue';
+import HierarchicalEdgeBundling from "./components/HierarchicalEdgeBundling.vue";
+import TemporalForceDirectedGraph from "./components/TemporalForceDirectedGraph.vue";
+import StatisticsPlotsView from "./components/StatisticsPlotsView.vue";
 
 export default {
   components: {
-    Notes,
-    Example,
-    ExampleWithLegend,
-    ExampleWithInteractions
+    HierarchicalEdgeBundling,
+    TemporalForceDirectedGraph,
+    StatisticsPlotsView
   }
 }
 </script>
@@ -19,12 +17,7 @@ export default {
   <v-container id="main-container" class="d-flex flex-column flex-nowrap" fluid>
     <v-row no-gutters>
       <v-col cols="5">
-        <ExampleWithLegend/>
-      </v-col>
-    </v-row>
-    <v-row no-gutters>
-      <v-col>
-        <Notes msg="This message is showcasing how to pass down the props"/>
+        <TemporalForceDirectedGraph/>
       </v-col>
     </v-row>
   </v-container>

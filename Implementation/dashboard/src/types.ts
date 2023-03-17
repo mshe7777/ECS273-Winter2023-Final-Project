@@ -11,7 +11,15 @@ export interface ComponentSize {
     height: number;
 }
 
-export interface Point {
-    readonly posX: number;
-    readonly posY: number;
+export interface Node {
+    readonly id: number;
+    readonly outgoing: number;
+    readonly incoming: number;
+    readonly rating: number;
+}
+
+export interface Link {
+    readonly source: number;
+    readonly target: number;
+    readonly rating: number;
 }
