@@ -104,16 +104,20 @@ def user_monthly_degree(user_id, month_period):
     # filter by given user_id as source
     outgoingFilteredDf = monthFilteredDf4[monthFilteredDf4['source'] == user_id]
     outgoingFilteredDf = outgoingFilteredDf.groupby('datetime_typed').agg({'target': 'size'}).reset_index()
-    outgoingFilteredDf = outgoingFilteredDf.rename(columns={'datetime_typed': 'month', 'target': 'outgoing'})
+    outgoingFilteredDf = outgoingFilteredDf.rename(columns={'datetime_typed': 'month', 'target': 'frequence'})
+    outgoingFilteredDf['type'] = 'outgoing'
+
     # filter by given user_id as target
     incomingFilteredDf = monthFilteredDf4[monthFilteredDf4['target'] == user_id]
     incomingFilteredDf = incomingFilteredDf.groupby('datetime_typed').agg({'source': 'size'}).reset_index()
-    incomingFilteredDf = incomingFilteredDf.rename(columns={'datetime_typed': 'month', 'source': 'incoming'})
-    mergedUserDf = pd.merge(outgoingFilteredDf, incomingFilteredDf, how='outer', on='month', )
-    mergedUserDf = mergedUserDf.replace(np.nan, 0)
-    mergedUserDf[['outgoing', 'incoming']] = mergedUserDf[['outgoing', 'incoming']].astype(int)
-    mergedUserDf['month'] = mergedUserDf.month.astype(str)
-    return mergedUserDf.to_dict('records')
+    incomingFilteredDf = incomingFilteredDf.rename(columns={'datetime_typed': 'month', 'source': 'frequence'})
+    incomingFilteredDf['type'] = 'incoming'
+
+    concatFrames = [incomingFilteredDf, outgoingFilteredDf]
+    resultFrame = pd.concat(concatFrames)
+    resultFrame['month'] = resultFrame.month.astype(str)
+
+    return resultFrame.to_dict('records')
 
 
 def save_raw_data_to_file():
@@ -126,5 +130,5 @@ def save_raw_data_to_file():
 
 if __name__ == "__main__":
     init("./data/soc-sign-bitcoinotc.csv")
-    save_raw_data_to_file()
-    print('done')
+    dict = user_monthly_degree('2',Period('2011-02'))
+    print(dict)
