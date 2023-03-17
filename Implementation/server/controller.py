@@ -79,8 +79,6 @@ def rating_score_distribution(month_parameter):
     # supplement_list
 
     for missing_month in supplement_list:
-        if missing_month == 0:
-            continue
         ratingGroupedDf.loc[len(ratingGroupedDf.index)] = [missing_month, 0]
 
     while max_rating < 10:
@@ -120,5 +118,5 @@ def user_monthly_degree(user_id, month_period):
 
 if __name__ == "__main__":
     init("./data/soc-sign-bitcoinotc.csv")
-    dictList = user_monthly_degree('2', Period('2012-03'))
+    dictList = rating_score_distribution(Period('2011-03'))
     print(dictList)
