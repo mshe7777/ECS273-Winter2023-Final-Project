@@ -104,6 +104,31 @@ def user_monthly_degree(user_id, month_period):
     # filter by given user_id as source
     outgoingFilteredDf = monthFilteredDf4[monthFilteredDf4['source'] == user_id]
     outgoingFilteredDf = outgoingFilteredDf.groupby('datetime_typed').agg({'target': 'size'}).reset_index()
+    outgoingFilteredDf = outgoingFilteredDf.rename(columns={'datetime_typed': 'month', 'target': 'outgoing'})
+    # filter by given user_id as target
+    incomingFilteredDf = monthFilteredDf4[monthFilteredDf4['target'] == user_id]
+    incomingFilteredDf = incomingFilteredDf.groupby('datetime_typed').agg({'source': 'size'}).reset_index()
+    incomingFilteredDf = incomingFilteredDf.rename(columns={'datetime_typed': 'month', 'source': 'incoming'})
+    mergedUserDf = pd.merge(outgoingFilteredDf, incomingFilteredDf, how='outer', on='month', )
+    mergedUserDf = mergedUserDf.replace(np.nan, 0)
+    mergedUserDf[['outgoing', 'incoming']] = mergedUserDf[['outgoing', 'incoming']].astype(int)
+    mergedUserDf['month'] = mergedUserDf.month.astype(str)
+    return mergedUserDf.to_dict('records')
+
+
+def user_monthly_degree_flattened(user_id, month_period):
+    df_basic_immutable = get_basic_dataframe()
+    # filter by given month
+    monthFilteredDf4 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_period]
+
+    monthFilteredDf4 = monthFilteredDf4[
+        (monthFilteredDf4['source'] == user_id) | (monthFilteredDf4['target'] == user_id)]
+    monthFilteredDf4.reset_index(drop=True)
+    # convert date column to the type of Period(freq='M')
+    monthFilteredDf4['datetime_typed'] = monthFilteredDf4.datetime_typed.dt.to_period('M')
+    # filter by given user_id as source
+    outgoingFilteredDf = monthFilteredDf4[monthFilteredDf4['source'] == user_id]
+    outgoingFilteredDf = outgoingFilteredDf.groupby('datetime_typed').agg({'target': 'size'}).reset_index()
     outgoingFilteredDf = outgoingFilteredDf.rename(columns={'datetime_typed': 'month', 'target': 'frequence'})
     outgoingFilteredDf['type'] = 'outgoing'
 
