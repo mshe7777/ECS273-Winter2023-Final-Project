@@ -37,7 +37,7 @@ def temporal_user_rating_statistics(month):
     record_list = query_rating_records(month_period)
     # step 3. get_statistic_data
     statis_data = get_statistic_data(user_statistic_list)
-    # step 3. merge and generate result string
+    # step 4. merge and generate result string
     return json.dumps({'nodes': user_statistic_list, 'links': record_list, 'statistic': statis_data})
 
 

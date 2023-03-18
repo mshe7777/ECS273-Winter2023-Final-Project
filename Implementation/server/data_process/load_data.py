@@ -78,7 +78,7 @@ def __get_month_list():
     global MONTH_LIST
     dateGroupedDF = df_basic_immutable.groupby(df_basic_immutable.datetime_typed.dt.to_period("M")).agg(
         {'rating': 'size'}).reset_index()
-    dateGroupedDF = dateGroupedDF.query('rating>50 and rating <700')
+    dateGroupedDF = dateGroupedDF.query('rating>50 and rating <500')
 
     # randomly sampling the dataframe
     # dateGroupedDF = dateGroupedDF.query('rating >= 30')
