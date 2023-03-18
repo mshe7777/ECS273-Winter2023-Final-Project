@@ -1,30 +1,44 @@
-<script lang="ts">
-import HierarchicalEdgeBundling from "./components/HierarchicalEdgeBundling.vue";
-import TemporalForceDirectedGraph from "./components/TemporalForceDirectedGraph.vue";
-import StatisticsPlotsView from "./components/StatisticsPlotsView.vue";
-
-export default {
-  components: {
-    HierarchicalEdgeBundling,
-    TemporalForceDirectedGraph,
-    StatisticsPlotsView
-  }
-}
+<script setup>
+import ChartViews from "./views/ChartViews.vue";
 </script>
 
-<!--This is using the grid component from Vuetify to do layout design-->
 <template>
-  <v-container id="main-container" class="d-flex flex-column flex-nowrap" fluid>
-    <v-row no-gutters>
-      <v-col cols="5">
-        <TemporalForceDirectedGraph/>
-      </v-col>
-    </v-row>
-  </v-container>
+  <ChartViews />
 </template>
 
 <style scoped>
-#main-container{
-  height: 100%;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.vue:hover {
+  filter: drop-shadow(0 0 2em #42b883aa);
+}
+</style>
+<style>
+.tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #999;
+  padding: 5px;
+  background: white;
+  border-radius: 5px;
+}
+.tooltip p {
+  margin: 0;
+}
+
+.maker {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  border-radius: 50%;
 }
 </style>
