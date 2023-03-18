@@ -13,7 +13,7 @@ def get_months():
 def get_temporal_user_statistics(parameter_month):
     df_basic_immutable = get_basic_dataframe()
     # filtering df using specified month
-    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= parameter_month]
+    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == parameter_month]
     filtered3.reset_index()
 
     # group df according to in-degree and out-degree respectively
@@ -32,14 +32,42 @@ def get_temporal_user_statistics(parameter_month):
     return merged.to_dict('records')
 
 
+def get_statistic_data(dict_list):
+    # extract statistic inside the nodes list
+    if len(dict_list) == 0:
+        return {'minCountIn': 0, 'maxCountIn': 0, 'minCountOut': 0, 'maxCountOut': 0, 'minSumRatingIn': 0, 'maxSumRatingIn': 0}
+
+    statis_dict = {'minCountIn': 100000, 'maxCountIn': 0,
+                   'minCountOut': 1000000, 'maxCountOut': 0,
+                   'minSumRatingIn': 10000000, 'maxSumRatingIn': 0}
+    for tempRow in dict_list:
+        print(tempRow)
+        if tempRow['incoming'] < statis_dict['minCountIn']:
+            statis_dict['minCountIn'] = tempRow['incoming']
+        if tempRow['incoming'] > statis_dict['maxCountIn']:
+            statis_dict['maxCountIn'] = tempRow['incoming']
+
+        if tempRow['outgoing'] < statis_dict['minCountOut']:
+            statis_dict['minCountOut'] = tempRow['outgoing']
+        if tempRow['outgoing'] > statis_dict['maxCountOut']:
+            statis_dict['maxCountOut'] = tempRow['outgoing']
+
+        if tempRow['in_rating_sum'] < statis_dict['minSumRatingIn']:
+            statis_dict['minSumRatingIn'] = tempRow['in_rating_sum']
+        if tempRow['in_rating_sum'] > statis_dict['maxSumRatingIn']:
+            statis_dict['maxSumRatingIn'] = tempRow['in_rating_sum']
+
+    return statis_dict
+
+
 def query_rating_records(parameter_month):
     df_basic_immutable = get_basic_dataframe()
     # filtering df using specified month
-    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= parameter_month]
+    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == parameter_month]
     filtered3.reset_index()
 
     # searching the wanted rating list
-    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= parameter_month]
+    filtered3 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == parameter_month]
     filtered3.reset_index()
     filtered3 = filtered3.rename(columns={'datetime': 'time'})
     return filtered3[['source', 'target', 'rating', 'time']].to_dict('records')
@@ -47,20 +75,19 @@ def query_rating_records(parameter_month):
 
 def monthly_degree_distribution(month_parameter):
     df_basic_immutable = get_basic_dataframe()
-    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_parameter]
-    monthFilteredDf['datetime_typed'] = monthFilteredDf.datetime_typed.dt.to_period('M')
+    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == month_parameter]
     monthFilteredDf.reset_index()
-
     # group by month
+    monthFilteredDf['datetime_typed'] = monthFilteredDf['datetime_typed'].dt.strftime('%m-%d')
     monthGroupedDf = monthFilteredDf.groupby('datetime_typed').agg({'rating': 'size'}).reset_index()
     monthGroupedDf = monthGroupedDf.rename(columns={'datetime_typed': 'time', 'rating': 'edgeNumber'})
-    monthGroupedDf['time'] = monthGroupedDf.time.astype(str)
+
     return monthGroupedDf.to_dict('records')
 
 
 def rating_score_distribution(month_parameter):
     df_basic_immutable = get_basic_dataframe()
-    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_parameter]
+    monthFilteredDf = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == month_parameter]
     # group data according to rating scores
     ratingGroupedDf = monthFilteredDf.groupby('rating').agg({'source': 'size'}).reset_index()
 
@@ -94,13 +121,13 @@ def rating_score_distribution(month_parameter):
 def user_monthly_degree(user_id, month_period):
     df_basic_immutable = get_basic_dataframe()
     # filter by given month
-    monthFilteredDf4 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_period]
+    monthFilteredDf4 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == month_period]
 
     monthFilteredDf4 = monthFilteredDf4[
         (monthFilteredDf4['source'] == user_id) | (monthFilteredDf4['target'] == user_id)]
     monthFilteredDf4.reset_index(drop=True)
     # convert date column to the type of Period(freq='M')
-    monthFilteredDf4['datetime_typed'] = monthFilteredDf4.datetime_typed.dt.to_period('M')
+    monthFilteredDf4['datetime_typed'] = monthFilteredDf4['datetime_typed'].dt.strftime('%m-%d')
     # filter by given user_id as source
     outgoingFilteredDf = monthFilteredDf4[monthFilteredDf4['source'] == user_id]
     outgoingFilteredDf = outgoingFilteredDf.groupby('datetime_typed').agg({'target': 'size'}).reset_index()
@@ -119,7 +146,7 @@ def user_monthly_degree(user_id, month_period):
 def user_monthly_degree_flattened(user_id, month_period):
     df_basic_immutable = get_basic_dataframe()
     # filter by given month
-    monthFilteredDf4 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') <= month_period]
+    monthFilteredDf4 = df_basic_immutable[df_basic_immutable.datetime_typed.dt.to_period('M') == month_period]
 
     monthFilteredDf4 = monthFilteredDf4[
         (monthFilteredDf4['source'] == user_id) | (monthFilteredDf4['target'] == user_id)]
