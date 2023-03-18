@@ -3,7 +3,8 @@ from flask_cors import CORS, cross_origin
 from pandas._libs.tslibs.period import Period
 from data_process.load_data import init
 from controller import get_months, get_temporal_user_statistics, query_rating_records, monthly_degree_distribution, \
-    rating_score_distribution, user_monthly_degree,save_raw_data_to_file,user_monthly_degree_flattened
+    rating_score_distribution, user_monthly_degree, save_raw_data_to_file, user_monthly_degree_flattened, \
+    get_statistic_data
 import numpy as np
 import json
 
@@ -34,8 +35,10 @@ def temporal_user_rating_statistics(month):
     user_statistic_list = get_temporal_user_statistics(month_period)
     # step 2. rating records
     record_list = query_rating_records(month_period)
+    # step 3. get_statistic_data
+    statis_data = get_statistic_data(user_statistic_list)
     # step 3. merge and generate result string
-    return json.dumps({'nodes': user_statistic_list, 'links': record_list})
+    return json.dumps({'nodes': user_statistic_list, 'links': record_list, 'statistic': statis_data})
 
 
 @app.route("/temporal/degreeDistribution/<month>")
@@ -80,14 +83,11 @@ def monthly_degree_flat(user_id, month):
     return json.dumps({'data': dictList})
 
 
-
-
 @app.route("/file/generate")
 @cross_origin()
 def generate_file():
     save_raw_data_to_file()
-    return json.dumps({'result':'done'})
-
+    return json.dumps({'result': 'done'})
 
 
 def get_month_period(month):

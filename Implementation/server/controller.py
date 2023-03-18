@@ -32,6 +32,34 @@ def get_temporal_user_statistics(parameter_month):
     return merged.to_dict('records')
 
 
+def get_statistic_data(dict_list):
+    # extract statistic inside the nodes list
+    if len(dict_list) == 0:
+        return {'minCountIn': 0, 'maxCountIn': 0, 'minCountOut': 0, 'maxCountOut': 0, 'minSumRatingIn': 0, 'maxSumRatingIn': 0}
+
+    statis_dict = {'minCountIn': 100000, 'maxCountIn': 0,
+                   'minCountOut': 1000000, 'maxCountOut': 0,
+                   'minSumRatingIn': 10000000, 'maxSumRatingIn': 0}
+    for tempRow in dict_list:
+        print(tempRow)
+        if tempRow['incoming'] < statis_dict['minCountIn']:
+            statis_dict['minCountIn'] = tempRow['incoming']
+        if tempRow['incoming'] > statis_dict['maxCountIn']:
+            statis_dict['maxCountIn'] = tempRow['incoming']
+
+        if tempRow['outgoing'] < statis_dict['minCountOut']:
+            statis_dict['minCountOut'] = tempRow['outgoing']
+        if tempRow['outgoing'] > statis_dict['maxCountOut']:
+            statis_dict['maxCountOut'] = tempRow['outgoing']
+
+        if tempRow['in_rating_sum'] < statis_dict['minSumRatingIn']:
+            statis_dict['minSumRatingIn'] = tempRow['in_rating_sum']
+        if tempRow['in_rating_sum'] > statis_dict['maxSumRatingIn']:
+            statis_dict['maxSumRatingIn'] = tempRow['in_rating_sum']
+
+    return statis_dict
+
+
 def query_rating_records(parameter_month):
     df_basic_immutable = get_basic_dataframe()
     # filtering df using specified month
