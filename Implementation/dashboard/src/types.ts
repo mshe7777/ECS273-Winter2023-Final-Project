@@ -12,14 +12,32 @@ export interface ComponentSize {
 }
 
 export interface Node {
-    readonly id: number;
+    readonly id: string;
     readonly outgoing: number;
     readonly incoming: number;
-    readonly rating: number;
+    readonly in_rating_sum: number;
+    readonly out_rating_sum: number;
 }
 
 export interface Link {
-    readonly source: number;
-    readonly target: number;
+    readonly source: string;
+    readonly target: string;
     readonly rating: number;
+    readonly time: number;
+}
+
+export interface EdgeNumberData {
+    readonly time: number;
+    readonly edgeNumber: number;
+}
+
+export interface EdgeWeightData {
+    readonly edgeRating: number;
+    readonly frequency: number;
+}
+
+export interface NodeHistoryData {
+    readonly month: string;
+    readonly incoming: number;
+    readonly outgoing: number;
 }
