@@ -88,7 +88,6 @@ const nowDate = computed(() => {
 });
 
 const changeTime = (val) => {
-  console.log(nowDate.value);
   getNetworkData(nowDate.value);
   getEdgeWightData(nowDate.value);
   getTemporalData(nowDate.value);
@@ -142,7 +141,7 @@ const NetworkData = ref({
 
 onMounted(() => {
   fetchMonthList();
-  changeTime();
+  //changeTime();
 });
 
 async function fetchMonthList() {
@@ -151,6 +150,7 @@ async function fetchMonthList() {
       monthList.value = resp.data.monthList;
       maxTime.value = monthList.value.length;
       console.log(monthList.value);
+      changeTime();
       return true;
     })
     .catch(error => console.log(error));
