@@ -54,6 +54,20 @@ const initChart = () => {
     .attr("transform", `translate(${width.value / 2},30)`)
     .attr("text-anchor", "middle");
 
+  svg
+      .append("text")
+      .text("In Degree")
+      .attr("transform", `translate(${width.value / 2},${height.value - 5})`)
+      .attr("font-size", "0.8em")
+      .attr("text-anchor", "middle");
+
+  svg
+      .append("text")
+      .text("Out Degree")
+      .attr("font-size", "0.8em")
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(30,${height.value / 2}) rotate(-90)`);
+
   xScale.value = d3.scaleLinear().range([0, innerWidth.value]);
 
   yScale.value = d3.scaleLinear().range([innerHeight.value, 0]);
@@ -157,8 +171,6 @@ const updateChart = () => {
         .style("display", "block")
         .html(() => {
           return `<p> <span>Id</span>:${d.id} </p>
-                  <p> <span>In</span>:${d.incoming} </p>
-                  <p> <span>Out</span>:${d.outgoing} </p>
       `;
         });
     })

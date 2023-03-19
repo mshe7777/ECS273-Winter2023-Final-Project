@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup>
-import {ref, onMounted, defineProps, watch, computed} from "vue";
+import { ref, onMounted, defineProps, watch, computed } from "vue";
 import * as d3 from "d3";
 
 const props = defineProps({

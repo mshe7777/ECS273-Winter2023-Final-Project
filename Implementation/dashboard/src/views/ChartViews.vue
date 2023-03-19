@@ -156,9 +156,11 @@ function getNetworkData(month) {
   axios
     .get(`${server}/temporal/userRatingStatistics/${month}`)
     .then((resp) => {
-      ScatterData.value = getCalNetworkData(resp.data.links)().nodes;
+      // ScatterData.value = getCalNetworkData(resp.data.links)().nodes;
+      ScatterData.value = resp.data.nodes;
       selectNode.value = ScatterData.value[0].id;
-      NetworkData.value = getCalNetworkData(resp.data.links)();
+      // NetworkData.value = getCalNetworkData(resp.data.links)();
+      NetworkData.value = resp.data;
       getStackData(selectNode.value, nowDate.value);
       return true;
     })
@@ -216,7 +218,7 @@ const getCalNetworkData = (links) => {
         let n = nodes.get(link.target);
         n.incoming = n.incoming + 1;
         n.in_rating_sum = n.in_rating_sum + link.rating;
-        nodes.set(link.target, n); // nodes[link.target+'sour'].incoming++;
+        nodes.set(link.target, n);
       } else {
         nodes.set(link.target, {
           id: link.target,
@@ -228,7 +230,7 @@ const getCalNetworkData = (links) => {
     });
     let arr = []; // debugger
     for (let key of nodes.keys()) {
-      arr.push(nodes.get(key)); // arr = arr.concat(nodes[i]);
+      arr.push(nodes.get(key));
     }
     return {
       nodes: arr,
@@ -243,11 +245,9 @@ const getCalNetworkData = (links) => {
   width: 1200px;
   height: 100vh;
   margin: 0 auto;
-  //   background: blanchedalmond;
   .nav {
     width: 100%;
     height: 4rem;
-
     padding: 0 20px;
     display: flex;
     .slider {
@@ -265,7 +265,6 @@ const getCalNetworkData = (links) => {
   .center {
     width: 100%;
     height: 55vh;
-
     display: flex;
     .left {
       width: 60%;
@@ -279,12 +278,10 @@ const getCalNetworkData = (links) => {
   .footer {
     width: 100%;
     height: 35vh;
-    // background: rebeccapurple;
     display: flex;
     .foot-item {
       width: 33.3%;
       height: 100%;
-      // background: red;
     }
   }
 }

@@ -58,7 +58,6 @@ const initChart = () => {
 
   svg
     .append("text")
-
     .attr("class", "title")
     .attr("transform", `translate(${width.value / 2},30)`)
     .attr("text-anchor", "middle");
@@ -160,14 +159,13 @@ const updateChart = () => {
         .style("left", event.x + 10 + "px")
         .style("display", "block")
         .html(() => {
-          return `<p> <span>month</span>:${d.data.month} </p>
+          return `<p> <span>day</span>:${d.data.month} </p>
         <p> <span class='maker' style='background:${color.value(
           "incoming"
         )}'> </span><span>Incoming</span>:${d.data.incoming} </p>
         <p> <span class='maker' style='background:${color.value(
           "outgoing"
         )}'> </span><span>Outgoing</span>:${d.data.outgoing} </p>
-
         `;
         });
     })

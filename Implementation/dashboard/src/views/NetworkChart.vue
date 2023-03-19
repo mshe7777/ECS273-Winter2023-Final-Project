@@ -116,7 +116,6 @@ const updateChart = ({ nodes, links, statistic }) => {
     .data(nodes)
     .join("circle")
     .attr("r", 4)
-
     .on("mouseover", function (event, d) {
       emitInfo("emitNode", d.id);
       d3.select(".tooltip")
