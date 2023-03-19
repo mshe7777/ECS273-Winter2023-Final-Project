@@ -92,7 +92,6 @@ const changeTime = (val) => {
   getNetworkData(nowDate.value);
   getEdgeWightData(nowDate.value);
   getTemporalData(nowDate.value);
-  selectNode.value = NetworkData.value.nodes[0].id;
   getStackData(selectNode.value, nowDate.value);
 };
 
@@ -134,19 +133,24 @@ const ScatterData = ref([]);
 
 const StackData = ref([]);
 
-const NetworkData = ref({});
+const NetworkData = ref({
+  nodes: [],
+  links: [],
+  statistic: {}
+});
+
 
 onMounted(() => {
   fetchMonthList();
-  console.log(monthList.value);
-  maxTime.value = monthList.value.length;
   changeTime();
 });
 
-function fetchMonthList() {
-  axios.get(`${server}/basic/monthList`)
+async function fetchMonthList() {
+  await axios.get(`${server}/basic/monthList`)
     .then(resp => {
-      monthList.value = resp.data.monthList
+      monthList.value = resp.data.monthList;
+      maxTime.value = monthList.value.length;
+      console.log(monthList.value);
       return true;
     })
     .catch(error => console.log(error));
@@ -158,6 +162,8 @@ function getNetworkData(month) {
       console.log(resp.data);
       NetworkData.value = resp.data;
       ScatterData.value = resp.data.nodes;
+      console.log(NetworkData.value);
+      console.log(ScatterData.value);
       return true;
     })
     .catch(error => console.log(error));
@@ -167,6 +173,7 @@ function getTemporalData(month) {
   axios.get(`${server}/temporal/degreeDistribution/${month}`)
     .then(resp => {
         TemporalData.value = resp.data.data;
+        console.log(TemporalData.value);
         return true;
     })
     .catch(error => console.log(error));
@@ -176,15 +183,17 @@ function getEdgeWightData(month) {
   axios.get(`${server}/temporal/ratingDistribution/${month}`)
     .then(resp => {
       EdgeWightData.value = resp.data.data;
+      console.log(EdgeWightData.value);
       return true;
     })
     .catch(error => console.log(error));
 }
 
 function getStackData(userid, month) {
-  axios.get(`${server}/temporal/user/monthlyDegree/${userid}/${month}"`)
+  axios.get(`${server}/temporal/user/monthlyDegree/${userid}/${month}`)
     .then(resp => {
       StackData.value = resp.data.data;
+      console.log(StackData.value);
       return true;
     })
     .catch(error => console.log(error));

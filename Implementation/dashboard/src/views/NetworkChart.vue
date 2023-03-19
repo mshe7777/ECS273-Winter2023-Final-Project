@@ -214,8 +214,6 @@ watch(
 
 function updateColor() {
   let temp = GROUP[props.groupBy];
-  // let max = +d3.max(nodes, (d) => d[temp]);
-  // let min = +d3.min(nodes, (d) => d[temp]);
 
   let stat = chartData.value.statistic;
   let max = NaN;
