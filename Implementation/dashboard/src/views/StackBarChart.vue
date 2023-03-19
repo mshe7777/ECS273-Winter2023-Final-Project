@@ -117,11 +117,11 @@ watch(
 watch(
   () => props.nodeId,
   () => {
-    d3.select(".title").text(`Node ${props.nodeId} historical degree`);
+    d3.select(".title").text(`Node ${props.nodeId} Historical Degree`);
   }
 );
 const updateChart = () => {
-  d3.select(".title").text(`Node ${props.nodeId} historical degree`);
+  d3.select(".title").text(`Node ${props.nodeId} Historical Degree`);
   const stackData = stack.value(chartData.value);
 
   yScale.value.domain(chartData.value.map((d) => d.month)).padding(0.2);

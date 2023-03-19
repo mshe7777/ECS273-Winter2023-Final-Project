@@ -50,7 +50,7 @@ const initChart = () => {
 
   svg
     .append("text")
-    .text("In/Out degree Scatter Plot")
+    .text("In/Out Degree Scatter Plot")
     .attr("transform", `translate(${width.value / 2},30)`)
     .attr("text-anchor", "middle");
 
@@ -157,6 +157,8 @@ const updateChart = () => {
         .style("display", "block")
         .html(() => {
           return `<p> <span>Id</span>:${d.id} </p>
+                  <p> <span>In</span>:${d.incoming} </p>
+                  <p> <span>Out</span>:${d.outgoing} </p>
       `;
         });
     })
