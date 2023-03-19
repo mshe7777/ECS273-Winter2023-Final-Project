@@ -40,6 +40,8 @@ const svg = ref();
 const tooltip = ref();
 const colorScale = ref();
 
+const zoom = ref();
+
 const initChart = () => {
   const div = document.querySelector(".network-chart").getBoundingClientRect();
   width.value = div.width;
@@ -48,7 +50,8 @@ const initChart = () => {
   svg.value = d3
       .select(svgRef.value)
       .attr("width", width.value)
-      .attr("height", height.value);
+      .attr("height", height.value)
+      .append("g");
 
   tooltip.value = d3
       .select("body")
@@ -56,7 +59,7 @@ const initChart = () => {
       .attr("class", "tooltip")
       .style("display", "none");
 
-  svg.value
+  d3.select(svgRef.value)
       .append("defs")
       .append("marker")
       .attr("id", "arrow")
@@ -71,8 +74,13 @@ const initChart = () => {
       .attr("fill", "#999");
 
   colorScale.value = d3.scaleOrdinal().range(d3.schemeCategory10);
+  zoom.value = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
   updateChart(chartData.value);
 };
+
+function zoomed(event) {
+  svg.value.attr("transform", event.transform);
+}
 
 const chartData = computed(() => {
   return props.data;
@@ -141,6 +149,8 @@ const updateChart = ({nodes, links, statistic}) => {
       .on("tick", ticked);
   simulation.alpha(1).restart();
 
+  d3.select(svgRef.value).call(zoom.value);
+
   function ticked() {
     link
         .attr("x1", function (d) {
@@ -208,8 +218,8 @@ function updateColor() {
   // let min = +d3.min(nodes, (d) => d[temp]);
 
   let stat = chartData.value.statistic;
-  let max = +Infinity;
-  let min = -Infinity;
+  let max = NaN;
+  let min = NaN;
 
   switch (temp) {
     case "incoming":
@@ -234,7 +244,7 @@ function updateColor() {
 
   svg.value.selectAll("circle").attr("fill", (d) => {
     let nowD = Math.ceil((d[temp] - min) / step);
-    if (nowD === 0) nowD = 1;
+    if (nowD == 0) nowD = 1;
     return colorScale.value(nowD);
   });
 }

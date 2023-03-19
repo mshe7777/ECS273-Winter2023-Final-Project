@@ -1,5 +1,5 @@
 <template>
-  <div class="scatter-chart">
+  <div className="scatter-chart">
     <svg ref="svgRef"></svg>
   </div>
 </template>
@@ -74,6 +74,7 @@ const initChart = () => {
 
   updateChart();
 };
+
 function zoomed(event) {
   const transform = event.transform;
 
@@ -122,6 +123,7 @@ function zoomed(event) {
     })
     .attr("r", 4);
 }
+
 const chartData = computed(() => {
   return props.data;
 });
@@ -145,6 +147,22 @@ const updateChart = () => {
     .attr("cy", (d) => yScale.value(d.outgoing))
     .attr("r", 4)
     .attr("fill", "#409eff");
+
+  content.value
+    .selectAll("circle")
+    .on("mouseover", function (event, d) {
+      d3.select(".tooltip")
+          .style("top", event.y + 10 + "px")
+          .style("left", event.x + 10 + "px")
+          .style("display", "block")
+          .html(() => {
+            return `<p> <span>Id</span>:${d.id} </p>
+      `;
+          });
+    })
+    .on("mouseout", function () {
+      d3.select(".tooltip").style("display", "none");
+    });
   content.value.select(".x-axis").transition().call(xAxis.value);
   content.value.select(".y-axis").transition().call(yAxis.value);
 
