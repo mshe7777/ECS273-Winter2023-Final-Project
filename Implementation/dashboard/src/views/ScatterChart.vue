@@ -152,13 +152,13 @@ const updateChart = () => {
     .selectAll("circle")
     .on("mouseover", function (event, d) {
       d3.select(".tooltip")
-          .style("top", event.y + 10 + "px")
-          .style("left", event.x + 10 + "px")
-          .style("display", "block")
-          .html(() => {
-            return `<p> <span>Id</span>:${d.id} </p>
+        .style("top", event.y + 10 + "px")
+        .style("left", event.x + 10 + "px")
+        .style("display", "block")
+        .html(() => {
+          return `<p> <span>Id</span>:${d.id} </p>
       `;
-          });
+        });
     })
     .on("mouseout", function () {
       d3.select(".tooltip").style("display", "none");

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup>
-import {ref, onMounted, defineProps, watch, computed} from "vue";
+import { ref, onMounted, defineProps, watch, computed } from "vue";
 import * as d3 from "d3";
 
 const props = defineProps({
@@ -28,69 +28,69 @@ const height = ref();
 
 const content = ref();
 const xScale = ref(),
-    yScale = ref(),
-    innerHeight = ref();
+  yScale = ref(),
+  innerHeight = ref();
 
 const xAxis = ref(),
-    yAxis = ref();
+  yAxis = ref();
 
 const stack = ref();
 const color = ref();
 
 const initChart = () => {
   const div = document
-      .querySelector(".stack-bar-chart")
-      .getBoundingClientRect();
+    .querySelector(".stack-bar-chart")
+    .getBoundingClientRect();
   width.value = div.width;
   height.value = div.height;
 
   const svg = d3
-      .select(svgRef.value)
-      .attr("width", width.value)
-      .attr("height", height.value);
+    .select(svgRef.value)
+    .attr("width", width.value)
+    .attr("height", height.value);
 
   const innerWidth = width.value - margin.value.left - margin.value.right;
   innerHeight.value = height.value - margin.value.bottom - margin.value.top;
 
   content.value = svg
-      .append("g")
-      .attr("transform", `translate(${margin.value.left},${margin.value.top})`);
+    .append("g")
+    .attr("transform", `translate(${margin.value.left},${margin.value.top})`);
 
   svg
-      .append("text")
+    .append("text")
 
-      .attr("class", "title")
-      .attr("transform", `translate(${width.value / 2},30)`)
-      .attr("text-anchor", "middle");
+    .attr("class", "title")
+    .attr("transform", `translate(${width.value / 2},30)`)
+    .attr("text-anchor", "middle");
 
   const naiveKey = ["outgoing", "incoming"];
 
   stack.value = d3
-      .stack()
-      .keys(naiveKey)
-      .order(d3.stackOrderNone)
-      .offset(d3.stackOffsetNone);
+    .stack()
+    .keys(naiveKey)
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
 
   color.value = d3.scaleOrdinal().domain(naiveKey).range(d3.schemeCategory10);
 
   let legend = svg
-      .selectAll(".legend")
-      .data(naiveKey)
-      .join("g")
-      .attr("transform", (d, i) => `translate(${150 + 100 * i},50)`);
+    .selectAll(".legend")
+    .data(naiveKey)
+    .join("g")
+    .attr("transform", (d, i) => `translate(${150 + 100 * i},50)`);
 
   legend
-      .append("text")
-      .text((d) => d)
-      .attr("font-size", "0.8em")
-      .attr("x", 30)
-      .attr("y", 8);
+    .append("text")
+    .text((d) => d)
+    .attr("font-size", "0.8em")
+    .attr("x", 30)
+    .attr("y", 8);
 
   legend
-      .append("rect")
-      .attr("width", 20)
-      .attr("height", 10)
-      .attr("fill", (d, i) => color.value(d));
+    .append("rect")
+    .attr("width", 20)
+    .attr("height", 10)
+    .attr("fill", (d, i) => color.value(d));
 
   yScale.value = d3.scaleBand().range([0, innerHeight.value]);
 
@@ -109,10 +109,16 @@ const chartData = computed(() => {
 });
 
 watch(
-    () => props.data,
-    () => {
-      updateChart();
-    }
+  () => props.data,
+  () => {
+    updateChart();
+  }
+);
+watch(
+  () => props.nodeId,
+  () => {
+    d3.select(".title").text(`Node ${props.nodeId} historical degree`);
+  }
 );
 const updateChart = () => {
   d3.select(".title").text(`Node ${props.nodeId} historical degree`);
@@ -125,50 +131,49 @@ const updateChart = () => {
   xScale.value.domain([0, maxValue]);
 
   content.value
-      .selectAll(".stackGroup")
-      .data(stackData)
-      .join("g")
-      .attr("class", "stackGroup")
-      .attr("fill", (d, i) => {
-        return color.value(d.key);
-      })
-      .selectAll("rect")
-      .data((d) => d)
-      .join("rect")
-      .transition()
-      .attr("width", (d) => {
-        return xScale.value(d[1]) - xScale.value(d[0]);
-      })
-      .attr("opacity", "0.8")
-      .attr("height", yScale.value.bandwidth())
-      .attr("y", (d) => {
-        return yScale.value(d.data.month);
-      })
-      .attr("x", (d) => xScale.value(d[0]));
+    .selectAll(".stackGroup")
+    .data(stackData)
+    .join("g")
+    .attr("class", "stackGroup")
+    .attr("fill", (d, i) => {
+      return color.value(d.key);
+    })
+    .selectAll("rect")
+    .data((d) => d)
+    .join("rect")
+    .transition()
+    .attr("width", (d) => {
+      return xScale.value(d[1]) - xScale.value(d[0]);
+    })
+    .attr("opacity", "0.8")
+    .attr("height", yScale.value.bandwidth())
+    .attr("y", (d) => {
+      return yScale.value(d.data.month);
+    })
+    .attr("x", (d) => xScale.value(d[0]));
 
   content.value
-      .selectAll("rect")
-      .on("mouseover", (event, d) => {
-        console.log(d);
-        d3.select(".tooltip")
-            .style("top", event.y + 10 + "px")
-            .style("left", event.x + 10 + "px")
-            .style("display", "block")
-            .html(() => {
-              return `<p> <span>month</span>:${d.data.month} </p>
+    .selectAll("rect")
+    .on("mouseover", (event, d) => {
+      d3.select(".tooltip")
+        .style("top", event.y + 10 + "px")
+        .style("left", event.x + 10 + "px")
+        .style("display", "block")
+        .html(() => {
+          return `<p> <span>month</span>:${d.data.month} </p>
         <p> <span class='maker' style='background:${color.value(
-                  "incoming"
-              )}'> </span><span>Incoming</span>:${d.data.incoming} </p>
+          "incoming"
+        )}'> </span><span>Incoming</span>:${d.data.incoming} </p>
         <p> <span class='maker' style='background:${color.value(
-                  "outgoing"
-              )}'> </span><span>Outgoing</span>:${d.data.outgoing} </p>
+          "outgoing"
+        )}'> </span><span>Outgoing</span>:${d.data.outgoing} </p>
 
         `;
-            });
-      })
-      .on("mouseout", function (event, d) {
-        d3.select(".tooltip").style("display", "none");
-      });
+        });
+    })
+    .on("mouseout", function (event, d) {
+      d3.select(".tooltip").style("display", "none");
+    });
 
   content.value.select(".x-axis").transition().call(xAxis.value);
   content.value.select(".y-axis").transition().call(yAxis.value);
