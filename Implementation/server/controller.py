@@ -26,8 +26,8 @@ def get_temporal_user_statistics(parameter_month):
     indegree_filterd.rename(columns={'target': 'id', 'source': 'incoming', 'rating': 'in_rating_sum'},
                             inplace=True)
     # the dataframe after merging
-    merged = pd.merge(indegree_filterd, outdegree_filterd, on='id')
-
+    merged = pd.merge(indegree_filterd, outdegree_filterd, on='id', how='outer')
+    merged = merged.replace(np.nan, 0)
     # converting the dataframe to List
     return merged.to_dict('records')
 
