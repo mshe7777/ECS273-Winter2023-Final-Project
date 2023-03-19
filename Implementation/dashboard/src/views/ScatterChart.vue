@@ -170,13 +170,15 @@ const updateChart = () => {
         .style("left", event.x + 10 + "px")
         .style("display", "block")
         .html(() => {
-          return `<p> <span>Id</span>:${d.id} </p>
+          return `<p> <span>In</span>:${d.incoming} </p>
+                  <p> <span>Out</span>:${d.outgoing} </p>
       `;
         });
     })
     .on("mouseout", function () {
       d3.select(".tooltip").style("display", "none");
     });
+
   content.value.select(".x-axis").transition().call(xAxis.value);
   content.value.select(".y-axis").transition().call(yAxis.value);
 

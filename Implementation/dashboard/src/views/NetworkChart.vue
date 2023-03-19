@@ -23,8 +23,9 @@ const emitInfo = defineEmits(["emitNode"]);
 const GROUP = {
   none: "",
   incoming: "incoming",
-  rating: "in_rating_sum",
+  in_rating: "in_rating_sum",
   outgoing: "outgoing",
+  out_rating: "out_rating_sum"
 };
 
 const svgRef = ref();
@@ -127,6 +128,7 @@ const updateChart = ({ nodes, links, statistic }) => {
         <p> <span>Incoming</span>:${d.incoming} </p>
         <p> <span>Outgoing</span>:${d.outgoing} </p>
         <p> <span>In_rating_sum</span>:${d.in_rating_sum} </p>
+        <p> <span>Out_rating_sum</span>:${d.out_rating_sum} </p>
         `;
         });
     })

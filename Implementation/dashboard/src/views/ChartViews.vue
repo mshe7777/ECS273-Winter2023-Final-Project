@@ -106,8 +106,8 @@ const options = [
     label: "none",
   },
   {
-    value: "rating",
-    label: "rating",
+    value: "in_rating",
+    label: "in_rating",
   },
   {
     value: "outgoing",
@@ -117,6 +117,10 @@ const options = [
     value: "incoming",
     label: "incoming",
   },
+  {
+    value: "out_rating",
+    label: "out_rating",
+  }
 ];
 
 const changeSelected = (val) => {
