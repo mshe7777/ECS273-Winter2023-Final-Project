@@ -41,7 +41,6 @@ def get_statistic_data(dict_list):
                    'minCountOut': 1000000, 'maxCountOut': 0,
                    'minSumRatingIn': 10000000, 'maxSumRatingIn': 0}
     for tempRow in dict_list:
-        print(tempRow)
         if tempRow['incoming'] < statis_dict['minCountIn']:
             statis_dict['minCountIn'] = tempRow['incoming']
         if tempRow['incoming'] > statis_dict['maxCountIn']:
