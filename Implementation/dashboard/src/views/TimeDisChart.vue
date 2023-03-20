@@ -62,7 +62,7 @@ const initChart = () => {
 
   svg
       .append("text")
-      .text("Growth rate[edges/month]")
+      .text("Growth rate[edges/day]")
       .attr("font-size", "0.8em")
       .attr("text-anchor", "middle")
       .attr("transform", `translate(20,${height.value / 2}) rotate(-90)`);
