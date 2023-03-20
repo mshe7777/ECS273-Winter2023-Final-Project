@@ -15,7 +15,7 @@ Working Group: Yifeng Shi, Musheng He
 ## User Instructions
 We implemented this project based on the template provided by instructors for the warmup programming
 assignment, so there is no extra instructions need to be executed, just the original instructions introduced
-in './Assignment/README.md'
+in the template git repository in directory '/Assignment/README.md'
 
 ## Functionalities
 1. Temporal force-directed graph to express the directed graph of Bitcoin signed weighted network.
