@@ -1,21 +1,24 @@
-# SoVis: A Visual Analytics System for Exploring Social Network
+# ECS273-Winter2023 Final Project
 Professor: Kwan-Liu Ma
-TA: Yun-Hsin Kuo
-Working Group: Musheng He
-Yifeng Shi
-ECS 273 Visual Analytics
-Winter Quarter 2023
-Course Final Project
 
-Professor: Kwan-Liu Ma
 TA: Yun-Hsin Kuo
 
 Working Group: Yifeng Shi, Musheng He
+
 
 ## User Instructions
 We implemented this project based on the template provided by instructors for the warmup programming
 assignment, so there is no extra instructions need to be executed, just the original instructions introduced
 in the template git repository in directory '/Assignment/README.md'
+
+#### Quick Start
+1. Run the  `./Inplementation/server/app.py` file.
+
+2. Start the application, under `./Inplementation/dashboard` directory, by executing the following script:
+   ```bash
+   npm run start
+   ```
+   then, you can then visit `localhost:3000` in the browser to see the interface.
 
 ## Functionalities
 1. Temporal force-directed graph to express the directed graph of Bitcoin signed weighted network.
@@ -31,4 +34,3 @@ in the template git repository in directory '/Assignment/README.md'
    hover pointer on a plot to see text.
 
 Graphs described in 2. 3. and 4 are cascaded with the force-directed graph by hovering pointer on a particular node.
-

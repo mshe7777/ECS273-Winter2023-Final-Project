@@ -11,6 +11,15 @@ We implemented this project based on the template provided by instructors for th
 assignment, so there is no extra instructions need to be executed, just the original instructions introduced
 in the template git repository in directory '/Assignment/README.md'
 
+#### Quick Start
+1. Run the  `./Inplementation/server/app.py` file.
+
+2. Start the application, under `./Inplementation/dashboard` directory, by executing the following script: 
+   ```bash
+   npm run start
+   ```
+   then, you can then visit `localhost:3000` in the browser to see the interface.
+
 ## Functionalities
 1. Temporal force-directed graph to express the directed graph of Bitcoin signed weighted network.
    - A scroll bar to choose time.
