@@ -1,14 +1,20 @@
-# ECS273-Winter2023 Final Project
+# SoVis: A Visual Analytics System for Exploring Social Network
 Professor: Kwan-Liu Ma
+TA: Yun-Hsin Kuo
+Working Group: Musheng He
+Yifeng Shi
+ECS 273 Visual Analytics
+Winter Quarter 2023
+Course Final Project
 
+Professor: Kwan-Liu Ma
 TA: Yun-Hsin Kuo
 
 Working Group: Yifeng Shi, Musheng He
 
-
 ## User Instructions
-We implemented this project based on the template provided by instructors for the warmup programming 
-assignment, so there is no extra instructions need to be executed, just the original instructions introduced 
+We implemented this project based on the template provided by instructors for the warmup programming
+assignment, so there is no extra instructions need to be executed, just the original instructions introduced
 in './Assignment/README.md'
 
 ## Functionalities
@@ -24,5 +30,5 @@ in './Assignment/README.md'
 4. Two histograms displaying distribution of rating scores and frequency.
    hover pointer on a plot to see text.
 
-Graphs described in 2. 3. and 4 are cascaded with the force-directed graph by hovering pointer on a particular node. 
+Graphs described in 2. 3. and 4 are cascaded with the force-directed graph by hovering pointer on a particular node.
 
